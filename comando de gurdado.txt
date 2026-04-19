@@ -1,0 +1,16 @@
+comando de gurdado
+
+2. El "Combo Ganador" en la Terminal
+Abre la terminal en esa carpeta (como ya sabes hacer) y escribe estos tres comandos, uno por uno:
+
+Bash
+git add .
+(Esto le dice a Git: "Mira, hay archivos nuevos").
+
+Bash
+git commit -m "agregando mi nueva tarea"
+(Esto guarda el cambio en tu PC con un mensaje).
+
+Bash
+git push origin main
+(Esto envía el archivo a la nube de GitHub).
