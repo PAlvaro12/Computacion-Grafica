@@ -1,39 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CUADRADO Y UN TRIÁNGULO</title>
+    <title>ACTIVIDAD NRO. 1 CON RELLENO</title>
 </head>
-<body
+<body>
+    <h2>ACTIVIDAD EN CLASE NRO. 1</h2>
+    <canvas id="myCanvas" width="500" height="500" style="border:4px solid red;"></canvas>
 
-    <H2>CREAR UN CUADRADO Y UN TRIÁNGULO</H2>
-    <CANVAS id="myCanvas" width="500" height="500" style="border:4px solid black;"></CANVAS>
-
-    <SCRIPt>
+    <script>
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
 
-        // Dibujar un cuadrado
+        // Configuración de estilo global para los bordes
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 3;
+
+        // --- 1. Dibujar el CUADRADO (parte superior) con relleno ---
         ctx.beginPath();
-        ctx.rect(50, 50, 100, 150);  // x,y , ancho, alto
-        ctx.fillStyle = "red";
+        ctx.rect(175, 50, 150, 150); // Mismas coordenadas que antes
+        
+        // Primero rellenamos
+        ctx.fillStyle = "lime"; // Color verde lima para el cuadrado
         ctx.fill();
+        
+        // Luego dibujamos el borde para que quede encima
+        ctx.stroke(); 
+
+
+        // --- 2. Dibujar la LÍNEA divisoria horizontal (sin relleno) ---
+        ctx.beginPath();
+        ctx.moveTo(0, 250);   
+        ctx.lineTo(500, 250); 
         ctx.stroke();
 
 
-        // Dibujar un triángulo
+        // --- 3. Dibujar el TRIÁNGULO (parte inferior) con relleno ---
         ctx.beginPath();
-        ctx.moveTo(250, 50);  // inicio en el vertice superior del triángulo
-        ctx.lineTo(300, 150);  // vertice inferior derecho del triángulo
-        ctx.lineTo(200, 150);  // vertice inferior izquierdo del triángulo
-        ctx.closePath();
-        ctx.fillStyle = "lightcoral";
+        ctx.moveTo(250, 300);  // Punta superior del triángulo
+        ctx.lineTo(350, 450);  // Esquina inferior derecha
+        ctx.lineTo(150, 450);  // Esquina inferior izquierda
+        ctx.closePath();       
+        
+        // Primero rellenamos
+        ctx.fillStyle = "skyblue"; // Color azul cielo para el triángulo
         ctx.fill();
+        
+        // Luego dibujamos el borde
         ctx.stroke();
-    </SCRIPt>
 
-
+    </script>
 </body>
 </html>
 

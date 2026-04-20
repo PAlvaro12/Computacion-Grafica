@@ -1,60 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>linea dinamica</title>
+    <title>Plano Cartesiano Sombreado</title>
 </head>
 <body>
-    <CENTRE><h2>Línea Dinámica</h2>
-    <canvas id="myCanvas" width="800" height="400" style="border: 1px solid black;"></canvas>
-<!-- CODIGO JAVASCRIP -->
+    <h2>Plano Cartesiano con Rejilla y Números</h2>
+    <canvas id="myCanvas" width="800" height="400" style="border: 1px solid black; background-color: #fdfdfd;"></canvas>
 
-<script>
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
 
-    var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext("2d");
+        var time = 0;
+        var centroX = 200; 
+        var centroY = 200; 
+        var pasoRejilla = 50; // Distancia entre líneas de la cuadrícula
 
-    // variables necesarias para el graficos
+        function drawGraph() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-var xstart = 0; // punto de inicio en el eje x
-var xend = 800; // punto de fin en el eje y
-var step  = 0.1; // paso para el incremento de x
-var time=0; // variable para animar el grafico 
+            // --- 1. DIBUJAR REJILLA DE FONDO (Sombreado) ---
+            ctx.beginPath();
+            ctx.strokeStyle = '#e0e0e0'; // Gris muy claro
+            ctx.lineWidth = 1;
 
-// funcion para dibujar el grafico
-function drawGraph() {
-    //limpiar el lienzo antes de dibujar el nuevo gráfico
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // limpiar el canvas
-// configurar el estilo de la línea
-ctx.beginPath();
-ctx.strokeStyle= 'blue'; // color de la línea
-ctx.lineWidth = 2; // grosor de la línea
-//dibuja la funcion  Y = sin(x)
-for (var x = xstart; x < xend; x += step) {
-    var y = Math.sin(x*0.01+time); // función para crear una onda sinusoidal con el tiempo para animar
+            // Líneas verticales de la rejilla
+            for (var x = 0; x <= canvas.width; x += pasoRejilla) {
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+            }
 
-    if (x === xstart) {
-        ctx.moveTo(x,canvas.height/2 -y*100); // posiciona el el punto de inicio en el eje x y el centro del canvas en el eje y
-    } 
-    
-    else {
-        ctx.lineTo(x,canvas.height/2-y*100); // dibujar la línea
+            // Líneas horizontales de la rejilla
+            for (var y = 0; y <= canvas.height; y += pasoRejilla) {
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+            }
+            ctx.stroke();
+
+            // --- 2. DIBUJAR EJES PRINCIPALES (Rojos) ---
+            ctx.beginPath();
+            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 2;
+            ctx.moveTo(0, centroY); ctx.lineTo(canvas.width, centroY); // Eje X
+            ctx.moveTo(centroX, 0); ctx.lineTo(centroX, canvas.height); // Eje Y
+            ctx.stroke();
+
+            // --- 3. DIBUJAR NÚMEROS Y MARCAS ---
+            ctx.fillStyle = "black";
+            ctx.font = "bold 11px Arial";
+            
+            for (var i = 0; i <= canvas.width; i += pasoRejilla) {
+                var valorX = i - centroX;
+                var valorY = centroY - i;
+
+                // Números en X
+                ctx.textAlign = "center";
+                ctx.fillText(valorX, i, centroY + 20);
+
+                // Números en Y (evitamos el 0 central para que no se amontone)
+                if (valorY !== 0 && i <= canvas.height) {
+                    ctx.textAlign = "right";
+                    ctx.fillText(valorY, centroX - 10, i + 5);
+                }
+            }
+
+            // --- 4. DIBUJAR ONDA DINÁMICA (Azul) ---
+            ctx.beginPath();
+            ctx.strokeStyle = 'blue';
+            ctx.lineWidth = 2;
+
+            for (var x = 0; x < canvas.width; x++) {
+                // y = sin(x) escalado
+                var yRelativa = Math.sin((x - centroX) * 0.02 + time);
+                var yCanvas = centroY - (yRelativa * 100);
+
+                if (x === 0) ctx.moveTo(x, yCanvas);
+                else ctx.lineTo(x, yCanvas);
+            }
+            ctx.stroke();
         }
-}
-        // dibuja la línea en el canvas
-ctx.stroke(); // dibujar la línea
-}
 
-// función para animar el gráfico
-function animate() {
-    drawGraph(); // dibujar el gráfico inicial   
-    time += 0.08; // incrementar el tiempo para animar la onda
-    requestAnimationFrame(animate); // llama a la funcion de animación
-}
+        function animate() {
+            drawGraph();
+            time -= 0.05;
+            requestAnimationFrame(animate);
+        }
 
-//inicia la animación
-animate(); // iniciar la animación
-</script>  
+        animate();
+    </script>
 </body>
 </html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gráfica de Barras Completa</title>
+</head>
+<body>
+    <h2>Gráfica de Barras Coloridas</h2>
+    <canvas id="myCanvas" width="600" height="450" style="border:1px solid black;"></canvas>
+
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // --- CONFIGURACIÓN PARA QUE SE NOTE TODO ---
+        var margenInferior = 50; 
+        var margenSuperior = 50; // Espacio extra arriba para los números
+        var anchoBarra = 60; 
+        var espacioEntreBarras = 25; 
+        var xInicial = 60; 
+        
+        // El área útil para las barras es el alto total menos los márgenes
+        var areaUtilAtura = canvas.height - margenInferior - margenSuperior; 
+
+        var datos = [
+            { porcentaje: 50, color: "red" },
+            { porcentaje: 60, color: "blue" },
+            { porcentaje: 70, color: "green" },
+            { porcentaje: 90, color: "yellow" },
+            { porcentaje: 100, color: "purple" }
+        ];
+
+        function drawChart() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.font = "bold 18px Arial";
+            ctx.textAlign = "center";
+
+            for (var i = 0; i < datos.length; i++) {
+                var d = datos[i];
+                
+                var x = xInicial + (i * (anchoBarra + espacioEntreBarras));
+                
+                // Calculamos la altura basándonos en el área útil
+                var alturaBarra = (d.porcentaje * areaUtilAtura) / 100;
+                
+                // La posición Y inicial ahora considera el margen superior
+                var y = canvas.height - margenInferior - alturaBarra;
+
+                // Dibujar barra
+                ctx.fillStyle = d.color;
+                ctx.fillRect(x, y, anchoBarra, alturaBarra);
+
+                // Dibujar borde a la barra para que se note más
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = 1;
+                ctx.strokeRect(x, y, anchoBarra, alturaBarra);
+
+                // Dibujar el texto arriba con espacio suficiente
+                ctx.fillStyle = "black";
+                ctx.fillText(d.porcentaje + "%", x + (anchoBarra / 2), y - 15);
+            }
+        }
+
+        drawChart();
+    </script>
+</body>
+</html>
