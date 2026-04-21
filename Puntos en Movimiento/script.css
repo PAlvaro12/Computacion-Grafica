@@ -1,0 +1,32 @@
+body {
+    background-color: #1a1a1a; /* Fondo oscuro tipo terminal */
+    color: #00ff00; /* Texto verde neón */
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+h2 {
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.canvas-container {
+    border: 2px solid #333;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+    background-color: #000;
+}
+
+canvas {
+    display: block;
+}
+
+.controles {
+    margin-top: 15px;
+    font-size: 0.9em;
+}
