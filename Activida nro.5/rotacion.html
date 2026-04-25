@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta 2: Rotación 3D - Ejes X e Y</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #000; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        // 1. CONFIGURACIÓN DE LA ESCENA
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // 2. CREAR EL CUBO VISIBLE
+        const geometry = new THREE.BoxGeometry(2, 2, 2); // Un poco más grande para ver mejor el giro
+        const material = new THREE.MeshNormalMaterial(); 
+        const cubo = new THREE.Mesh(geometry, material);
+        scene.add(cubo);
+
+        // 3. CONFIGURAR CÁMARA FRONTAL
+        camera.position.z = 5;
+
+        // 4. FUNCIÓN DE ANIMACIÓN PARA EL GIRO CONTINUO
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // ACCIONES ESPECÍFICAS:
+            // Rotación sobre el eje X (giro hacia adelante/atrás)
+            cubo.rotation.x += 0.01;
+
+            // Rotación sobre el eje Y (giro como una peonza o carrusel)
+            cubo.rotation.y += 0.01;
+
+            // Nota: Si quieres probar solo un eje, puedes comentar una de las líneas anteriores con //
+
+            renderer.render(scene, camera);
+        }
+
+        // Ajuste de ventana
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+
+        animate();
+    </script>
+</body>
+</html>

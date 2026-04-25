@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta 3: Control Interactivo 3D</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #111; font-family: sans-serif; }
+        #instrucciones {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="instrucciones">
+        <strong>Controles:</strong><br>
+        • Flechas: Traslación (Mover)<br>
+        • R: Rotación (Girar)<br>
+        • + / - : Escalado (Tamaño)
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        // 1. ESCENA, CÁMARA Y RENDER
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // 2. OBJETO PRINCIPAL (Cubo)
+        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const material = new THREE.MeshNormalMaterial();
+        const cubo = new THREE.Mesh(geometry, material);
+        scene.add(cubo);
+
+        camera.position.z = 5;
+
+        // 3. LÓGICA DE CONTROL POR TECLADO
+        window.addEventListener('keydown', (event) => {
+            const paso = 0.1; // Velocidad de transformación
+
+            switch (event.key) {
+                // TRASLACIÓN (Ejes X e Y)
+                case 'ArrowUp':    cubo.position.y += paso; break;
+                case 'ArrowDown':  cubo.position.y -= paso; break;
+                case 'ArrowLeft':  cubo.position.x -= paso; break;
+                case 'ArrowRight': cubo.position.x += paso; break;
+
+                // ROTACIÓN (Eje Y)
+                case 'r':
+                case 'R': cubo.rotation.y += 0.2; break;
+
+                // ESCALADO (Aumentar y Reducir)
+                case '+':
+                case '=': // El '+' suele compartir tecla con '='
+                    cubo.scale.x += paso;
+                    cubo.scale.y += paso;
+                    cubo.scale.z += paso;
+                    break;
+                case '-':
+                    // Evitar que el tamaño sea menor o igual a cero
+                    if(cubo.scale.x > 0.2) {
+                        cubo.scale.x -= paso;
+                        cubo.scale.y -= paso;
+                        cubo.scale.z -= paso;
+                    }
+                    break;
+            }
+        });
+
+        // 4. CICLO DE RENDERIZADO
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+
+        // Ajuste de ventana
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+
+        animate();
+    </script>
+</body>
+</html>

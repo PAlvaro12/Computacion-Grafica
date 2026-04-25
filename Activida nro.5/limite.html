@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta 1: Traslación 3D - Cubo</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #000; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        // 1. CREAR LA ESCENA
+        const scene = new THREE.Scene();
+
+        // 2. CREAR UNA CÁMARA (Perspectiva para notar la profundidad)
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5; // Posicionamos la cámara para visualizar el objeto
+
+        // 3. CREAR EL RENDERIZADOR
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // 4. INSERTAR UN CUBO COMO OBJETO PRINCIPAL
+        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const material = new THREE.MeshNormalMaterial(); // Colores automáticos según las caras
+        const cubo = new THREE.Mesh(geometry, material);
+        scene.add(cubo);
+
+        // 5. VARIABLES PARA CONTROLAR EL MOVIMIENTO
+        let velocidad = 0.05; 
+
+        // 6. FUNCIÓN DE ANIMACIÓN (Programar el desplazamiento horizontal)
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // TRASLACIÓN: Modificar la coordenada X continuamente
+            cubo.position.x += velocidad;
+
+            // ESTABLECER LÍMITES DE RECORRIDO (Rebote)
+            // Si llega al límite derecho (3) o izquierdo (-3), invierte la dirección
+            if (cubo.position.x > 3) {
+                velocidad = -0.05; // Cambia de dirección a la izquierda
+            }
+            if (cubo.position.x < -3) {
+                velocidad = 0.05; // Cambia de dirección a la derecha
+            }
+
+            // Dibujar la escena con los cambios aplicados
+            renderer.render(scene, camera);
+        }
+
+        // Ajustar el tamaño de la ventana si el usuario cambia el tamaño del navegador
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+
+        animate();
+    </script>
+</body>
+</html>
